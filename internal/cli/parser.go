@@ -1,8 +1,7 @@
-package main
+package cli
 
 import (
 	"errors"
-	"fmt"
 	"os"
 	"slices"
 	"strconv"
@@ -19,13 +18,13 @@ type Options struct {
 func ParseArgs() (*Options, error) {
 	var opts Options
 
-	args := os.Args
-	if len(args) < 2 {
+	args := os.Args[1:]
+	if len(args) < 1 {
 		err := "ERR: File name is required"
 		return nil, errors.New(err)
 	}
 
-	for i := 1; i < len(args); i++ {
+	for i := 0; i < len(args); i++ {
 		arg := args[i]
 		switch arg {
 		case "--rows", "-r":
@@ -52,15 +51,4 @@ func ParseArgs() (*Options, error) {
 		}
 	}
 	return &opts, nil
-}
-
-func PrintUsage() {
-	var usage strings.Builder
-	usage.WriteString("USAGE:\n")
-	usage.WriteString("  xlcat <file.xls[x|m]> [options]\n\n")
-	usage.WriteString("OPTIONS:\n")
-	usage.WriteString("  -r | --rows\tRows to preview\n")
-	usage.WriteString("  -s | --sheet\tSheet to preview\n")
-	usage.WriteString("  --sheets\tShows onle sheet names\n")
-	fmt.Println(usage.String())
 }
